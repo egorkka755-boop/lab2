@@ -29,3 +29,26 @@ class TestCalculator:
     def test_divide_by_zero(self):
         with pytest.raises(ValueError):
             self.calc.divide(5, 0)
+
+    def test_power(self):
+        assert self.calc.power(2, 3) == 8
+        assert self.calc.power(5, 2) == 25
+        assert self.calc.power(10, 0) == 1
+
+    def test_factorial(self):
+        assert self.calc.factorial(0) == 1
+        assert self.calc.factorial(1) == 1
+        assert self.calc.factorial(5) == 120
+
+    def test_factorial_negative(self):
+        with pytest.raises(ValueError):
+            self.calc.factorial(-1)
+
+    def test_percentage(self):
+        assert self.calc.percentage(50, 100) == 50
+        assert self.calc.percentage(25, 200) == 12.5
+        assert self.calc.percentage(1, 4) == 25
+
+    def test_percentage_zero_whole(self):
+        with pytest.raises(ValueError):
+            self.calc.percentage(10, 0)
