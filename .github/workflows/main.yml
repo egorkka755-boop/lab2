@@ -9,6 +9,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
       
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -24,10 +26,14 @@ jobs:
       run: |
         python -m pytest tests/ -v
         
-    # НОВЫЙ ШАГ: Автообновление README.md
+    - name: Run with coverage
+      run: |
+        pip install pytest-cov
+        python -m pytest tests/ --cov=src --cov-report=term-missing
+        
     - name: Update README automatically
       run: |
-        python scripts/update_readme.py
+        python scripts/generate_docs.py
         
     - name: Commit updated README
       run: |
@@ -36,3 +42,5 @@ jobs:
         git add README.md
         git diff --staged --quiet || git commit -m "Auto-update README.md"
         git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
