@@ -36,3 +36,4 @@ class Calculator:
         if whole == 0:
             raise ValueError("Whole cannot be zero")
         return (part / whole) * 100
+# Release v1.0.0 - Ready for production
