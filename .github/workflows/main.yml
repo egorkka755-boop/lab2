@@ -2,6 +2,9 @@ name: Python CI with Auto Docs
 
 on: [push, pull_request]
 
+permissions:
+  contents: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -40,5 +43,5 @@ jobs:
       with:
         commit_message: "Auto-update README.md"
         file_pattern: README.md
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        commit_user_name: "github-actions[bot]"
+        commit_user_email: "github-actions[bot]@users.noreply.github.com"
