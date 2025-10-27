@@ -27,7 +27,7 @@ jobs:
     # НОВЫЙ ШАГ: Автообновление README.md
     - name: Update README automatically
       run: |
-        python scripts/update_readme.py
+        python scripts/generate_docs.py
         
     - name: Commit updated README
       run: |
