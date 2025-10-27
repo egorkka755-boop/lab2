@@ -2,9 +2,6 @@ name: Python CI with Auto Docs
 
 on: [push, pull_request]
 
-permissions:
-  contents: write
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -12,8 +9,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
       
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -37,11 +32,10 @@ jobs:
     - name: Update README automatically
       run: |
         python scripts/generate_docs.py
+        echo "README updated locally. Manual commit required for persistent changes."
         
-    - name: Commit updated README
-      uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        commit_message: "Auto-update README.md"
-        file_pattern: README.md
-        commit_user_name: "github-actions[bot]"
-        commit_user_email: "github-actions[bot]@users.noreply.github.com"
+    - name: Show update status
+      run: |
+        echo "Documentation generated successfully"
+        echo "Check README.md for changes"
+        echo "Manual commit needed to save changes permanently"
