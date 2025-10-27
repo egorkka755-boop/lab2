@@ -1,30 +1,35 @@
-# Название всего CI/CD процесса
-name: Simple CI/CD
+name: Python CI with Tests
 
-# Условия запуска - когда срабатывает workflow
-on: [push]  # Запускается при любом push в любую ветку
+on: [push]
 
-# Блок заданий (jobs) - что нужно выполнить
 jobs:
-  # Первое задание с названием "build" (сборка)
-  build:
-    # На какой операционной системе запускать
+  test:
     runs-on: ubuntu-latest
     
-    # Шаги выполнения (steps) - последовательность действий
     steps:
     # Шаг 1: Получить код из репозитория
     - name: Checkout code
       uses: actions/checkout@v4
       
-    # Шаг 2: Установить зависимости проекта
+    # Шаг 2: Настроить Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    # Шаг 3: Установить зависимости
     - name: Install dependencies
-      run: echo "Installing dependencies..."
-      
-    # Шаг 3: Запустить тесты
-    - name: Run tests
-      run: echo "Running tests..."
-      
-    # Шаг 4: Развернуть приложение
-    - name: Deploy
-      run: echo "Deploying..."
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    # Шаг 4: Запустить unit-тесты
+    - name: Run unit tests
+      run: |
+        python -m pytest tests/ -v
+        
+    # Шаг 5: Проверить покрытие кода (опционально)
+    - name: Run with coverage
+      run: |
+        pip install pytest-cov
+        python -m pytest tests/ --cov=src --cov-report=term-missing
