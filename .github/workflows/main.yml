@@ -1,0 +1,30 @@
+# Название всего CI/CD процесса
+name: Simple CI/CD
+
+# Условия запуска - когда срабатывает workflow
+on: [push]  # Запускается при любом push в любую ветку
+
+# Блок заданий (jobs) - что нужно выполнить
+jobs:
+  # Первое задание с названием "build" (сборка)
+  build:
+    # На какой операционной системе запускать
+    runs-on: ubuntu-latest
+    
+    # Шаги выполнения (steps) - последовательность действий
+    steps:
+    # Шаг 1: Получить код из репозитория
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    # Шаг 2: Установить зависимости проекта
+    - name: Install dependencies
+      run: echo "Installing dependencies..."
+      
+    # Шаг 3: Запустить тесты
+    - name: Run tests
+      run: echo "Running tests..."
+      
+    # Шаг 4: Развернуть приложение
+    - name: Deploy
+      run: echo "Deploying..."
