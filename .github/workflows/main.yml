@@ -1,35 +1,46 @@
-name: Python CI with Tests
+name: Python CI with Auto Docs
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     
     steps:
-    # Шаг 1: Получить код из репозитория
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
       
-    # Шаг 2: Настроить Python
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.9'
         
-    # Шаг 3: Установить зависимости
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         
-    # Шаг 4: Запустить unit-тесты
     - name: Run unit tests
       run: |
         python -m pytest tests/ -v
         
-    # Шаг 5: Проверить покрытие кода (опционально)
     - name: Run with coverage
       run: |
         pip install pytest-cov
         python -m pytest tests/ --cov=src --cov-report=term-missing
+        
+    - name: Update README automatically
+      run: |
+        python scripts/generate_docs.py
+        
+    - name: Commit updated README
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add README.md
+        git diff --staged --quiet || git commit -m "Auto-update README.md"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
